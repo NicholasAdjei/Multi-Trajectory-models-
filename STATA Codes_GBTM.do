@@ -1,7 +1,7 @@
 
 set maxvar 30000
 clear all 
-use "G:\Abt_PrEv\Projekte\Nicholas ADJEI\Liverpool MCS data\mcs1to6_singletons.dta"
+use "G:\Abt_PrEv\Projekte\mcs1to6_singletons.dta"
 set more off
 
 drop if fovwt2==-1
@@ -11,11 +11,12 @@ svyset [pweight=fovwt2], strata(pttype2) psu(sptn00) fpc( nh2 )  // surveyweight
 
 ***Exposures for trajectory analysis**************************
 /*The main exposures were trajectories family adversity and poverty from age 9 months to 14 years. 
-Longitudinal measures of exposure were created from the indicators of family adversity of interest (i.e., poor parental mental health, domestic violence and abuse, and frequent parental alcohol use)and poverty from 9 months to age 14 years.
+Longitudinal measures of exposure were created from the indicators of family adversity of interest
+(i.e., poor parental mental health, domestic violence and abuse, and frequent parental alcohol use)and poverty from 9 months to age 14 years.
 A binary score was constructed for all exposures throughout childhood1(for full details see Box 1 in the paper)*/
 
 
-****Generate a set of time variables for trajectory groups********
+****Generate a set of time variables for exposures********
 
 forval i = 1/6 { 
   generate t_`i' = `i'
@@ -31,7 +32,8 @@ recode t_6 (6= 14) // 14 years
 /Group based trajectory analysis//
 
 //1. Choosing number of groups// The models were selected based on the Bayesian information criterion (BIC) 
-
+     *Note: The six-group trajectory model had the best fit 
+	 
 //Fitting 1 trajectory group//
 
 traj, multgroups(1) var1(M_MentalH_*) indep1(t_*) order1(3) model1(logit) ///
@@ -39,7 +41,9 @@ traj, multgroups(1) var1(M_MentalH_*) indep1(t_*) order1(3) model1(logit) ///
       var3(IPV_*) indep3(t_*) order3(3) model3(logit) ///
 	  var4(poverty_*) indep4(t_*) order4(3) model4(logit)
 	  
-****** Fit statstics: average posterior probability, the odds of correct classification, and the observed classification proportion versus the expected classification proportion ******
+****** Fit statstics: average posterior probability, the odds of correct classification,
+*and the observed classification proportion versus the expected classification proportion ******
+
 set more off
 
 *I made a function to print out summary stats
@@ -93,7 +97,9 @@ traj, multgroups(2) var1(M_MentalH_*) indep1(t_*) order1(3 3) model1(logit) ///
       var3(IPV_*) indep3(t_*) order3(3 3) model3(logit) ///
 	  var4(poverty_*) indep4(t_*) order4(3 3) model4(logit) 
 
-****** Fit statstics: average posterior probability, the odds of correct classification, and the observed classification proportion versus the expected classification proportion ******
+******* Fit statstics: average posterior probability, the odds of correct classification,
+*and the observed classification proportion versus the expected classification proportion ******
+
 set more off
 
 *I made a function to print out summary stats
@@ -146,8 +152,9 @@ traj, multgroups(3) var1(M_MentalH_*) indep1(t_*) order1(3 3 3) model1(logit) //
       var2(M_Alcohol_*) indep2(t_*) order2(3 3 3) model2(logit) ///
       var3(IPV_*) indep3(t_*) order3(3 3 3) model3(logit) ///
 	  var4(poverty_*) indep4(t_*) order4(3 3 3) model4(logit) 
-
-****** Fit statstics: average posterior probability, the odds of correct classification, and the observed classification proportion versus the expected classification proportion ******
+	  
+****** Fit statstics: average posterior probability, the odds of correct classification,
+*and the observed classification proportion versus the expected classification proportion ******
 
 set more off
 
@@ -201,8 +208,9 @@ traj, multgroups(4) var1(M_MentalH_*) indep1(t_*) order1(3 3 3 3) model1(logit) 
       var2(M_Alcohol_*) indep2(t_*) order2(3 3 3 3) model2(logit) ///
       var3(IPV_*) indep3(t_*) order3(3 3 3 3) model3(logit) ///
 	  var4(poverty_*) indep4(t_*) order4(3 3 3 3) model4(logit) 
-
-****** Fit statstics: average posterior probability, the odds of correct classification, and the observed classification proportion versus the expected classification proportion ******
+	  
+****** Fit statstics: average posterior probability, the odds of correct classification,
+*and the observed classification proportion versus the expected classification proportion ******
 
 set more off
 
@@ -257,8 +265,10 @@ traj, multgroups(5) var1(M_MentalH_*) indep1(t_*) order1(3 3 3 3 3) model1(logit
       var3(IPV_*) indep3(t_*) order3(3 3 3 3 3) model3(logit) ///
 	  var4(poverty_*) indep4(t_*) order4(3 3 3 3 3) model4(logit) 
 
-****** Fit statstics: average posterior probability, the odds of correct classification, and the observed classification proportion versus the expected classification proportion ******
 
+****** Fit statstics: average posterior probability, the odds of correct classification,
+*and the observed classification proportion versus the expected classification proportion ******	  
+	  
 set more off
 
 *I made a function to print out summary stats
@@ -313,10 +323,12 @@ traj, multgroups(6) var1(M_MentalH_*) indep1(t_*) order1(3 3 3 3 3 3) model1(log
 	  var4(poverty_*) indep4(t_*) order4(3 3 3 3 3 3) model4(logit) 
 	  
 ***** Traj Plot********
-multtrajplot, xtitle(Age) ytitle1(Mentalhealth) ytitle2(Alcohol) ytitle3(DVA ) ytitle4(poverty) ylabel1(0(0.1)0.8) ylabel2(0(0.1)0.7) ylabel3(0(0.1)0.8) ylabel4(0(0.1)1)
+multtrajplot, xtitle(Age) ytitle1(Mentalhealth) ytitle2(Alcohol) ytitle3(DVA ) ytitle4(poverty) ylabel1(0(0.1)0.8)
+ylabel2(0(0.1)0.7) ylabel3(0(0.1)0.8) ylabel4(0(0.1)1)
 	
 	
-****** Fit statstics: average posterior probability, the odds of correct classification, and the observed classification proportion versus the expected classification proportion ******
+****** Fit statstics: average posterior probability, the odds of correct classification,
+*and the observed classification proportion versus the expected classification proportion ******
 
 set more off
 
@@ -371,7 +383,8 @@ summary_table_procTraj_Toxictrio
 cap drop traj
 gen traj=_traj_Group
 recode traj (1=1) (2=2) (3=3)(4=4) (5=5) (6=6)
-label define  traj 1 "Low poverty and adversity" 2 "persistent poverty " 3 "persistent poor mental health"  4 "persistent poverty and poor mental health"  5 "Persistent alcohol use"  6 "persistent domestic violence and abuse", modify 
+label define  traj 1 "Low poverty and adversity" 2 "persistent poverty " 3 "persistent poor mental health"  4 "persistent poverty and poor mental health"  
+5 "Persistent alcohol use"  6 "persistent domestic violence and abuse", modify 
 label var traj  "Trajectory"
 lab value traj traj 
 tab traj 
@@ -384,7 +397,8 @@ traj, multgroups(7) var1(M_MentalH_*) indep1(t_*) order1(3 3 3 3 3 3 3) model1(l
       var3(IPV_*) indep3(t_*) order3(3 3 3 3 3 3 3) model3(logit) ///
 	  var4(poverty_*) indep4(t_*) order4(3 3 3 3 3 3 3) model4(logit) 
 
-****** Fit statstics: average posterior probability, the odds of correct classification, and the observed classification proportion versus the expected classification proportion ******
+****** Fit statstics: average posterior probability, the odds of correct classification,
+*and the observed classification proportion versus the expected classification proportion ******
 
 set more off
 
@@ -430,6 +444,78 @@ program summary_table_procTraj_Toxictrio
 end
 
 summary_table_procTraj_Toxictrio
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
